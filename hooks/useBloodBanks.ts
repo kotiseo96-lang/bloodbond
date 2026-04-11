@@ -3,19 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { BloodBank } from "@/types/database";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/src/contexts/AuthContext";
+import type { Database } from "@/integrations/supabase/types";
 
-// ✅ Define safe update type (ONLY DB columns)
-type BloodBankUpdate = {
-  name?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  zip_code?: string;
-  latitude?: number;
-  longitude?: number;
-};
+type BloodBankUpdate = Database["public"]["Tables"]["blood_banks"]["Update"];
 
 export const useBloodBanks = () => {
   const [bloodBanks, setBloodBanks] = useState<BloodBank[]>([]);
@@ -115,20 +105,13 @@ if (data.phone) safeData.phone = data.phone;
 if (data.address) safeData.address = data.address;
 
 // 🔥 FIX HERE
-if (data.city || data.city_id) {
-  safeData.city = data.city || data.city_id;
-}
-
-if (data.state || data.state_id) {
-  safeData.state = data.state || data.state_id;
-}
-
-// ❌ ONLY if column exists in DB
-// if (data.area || data.area_id) {
-//   safeData.area = data.area || data.area_id;
-// }
-
-if (data.zip_code) safeData.zip_code = data.zip_code;
+if (data.city !== undefined) safeData.city = data.city;
+if (data.city_id !== undefined) safeData.city_id = data.city_id;
+if (data.state !== undefined) safeData.state = data.state;
+if (data.state_id !== undefined) safeData.state_id = data.state_id;
+if (data.area_id !== undefined) safeData.area_id = data.area_id;
+if (data.operating_hours !== undefined) safeData.operating_hours = data.operating_hours;
+if (data.zip_code !== undefined) safeData.zip_code = data.zip_code;
 if (data.latitude) safeData.latitude = data.latitude;
 if (data.longitude) safeData.longitude = data.longitude;
 

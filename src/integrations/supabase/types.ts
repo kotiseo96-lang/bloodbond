@@ -28,13 +28,16 @@ export type Database = {
           operating_hours: string | null
           phone: string
           state: string | null
+          state_id: string | null
+          city_id: string | null
+          area_id: string | null
           updated_at: string
           user_id: string
           zip_code: string | null
         }
         Insert: {
           address: string
-          city: string
+          city?: string
           created_at?: string
           email: string
           id?: string
@@ -45,6 +48,9 @@ export type Database = {
           operating_hours?: string | null
           phone: string
           state?: string | null
+          state_id?: string | null
+          city_id?: string | null
+          area_id?: string | null
           updated_at?: string
           user_id: string
           zip_code?: string | null
@@ -62,6 +68,9 @@ export type Database = {
           operating_hours?: string | null
           phone?: string
           state?: string | null
+          state_id?: string | null
+          city_id?: string | null
+          area_id?: string | null
           updated_at?: string
           user_id?: string
           zip_code?: string | null
@@ -116,13 +125,17 @@ export type Database = {
           name: string
           phone: string
           state: string | null
+          state_id: string | null
+          city_id: string | null
+          area_id: string | null
+          operating_hours: string | null
           updated_at: string
           user_id: string
           zip_code: string | null
         }
         Insert: {
           address: string
-          city: string
+          city?: string
           created_at?: string
           email: string
           id?: string
@@ -132,6 +145,10 @@ export type Database = {
           name: string
           phone: string
           state?: string | null
+          state_id?: string | null
+          city_id?: string | null
+          area_id?: string | null
+          operating_hours?: string | null
           updated_at?: string
           user_id: string
           zip_code?: string | null
@@ -148,6 +165,10 @@ export type Database = {
           name?: string
           phone?: string
           state?: string | null
+          state_id?: string | null
+          city_id?: string | null
+          area_id?: string | null
+          operating_hours?: string | null
           updated_at?: string
           user_id?: string
           zip_code?: string | null
@@ -159,9 +180,20 @@ export type Database = {
           blood_bank_id: string
           blood_group: Database["public"]["Enums"]["blood_group"]
           created_at: string
-          hospital_id: string
+          hospital_id: string | null
+          guest_id: string | null
           id: string
           notes: string | null
+          patient_name: string | null
+          patient_age: number | null
+          patient_gender: string | null
+          doctor_name: string | null
+          doctor_registration_number: string | null
+          prescription_image_url: string | null
+          approved_at: string | null
+          ready_at: string | null
+          dispatched_at: string | null
+          delivered_at: string | null
           status: Database["public"]["Enums"]["order_status"]
           status_updated_at: string
           units_requested: number
@@ -172,9 +204,20 @@ export type Database = {
           blood_bank_id: string
           blood_group: Database["public"]["Enums"]["blood_group"]
           created_at?: string
-          hospital_id: string
+          hospital_id?: string | null
+          guest_id?: string | null
           id?: string
           notes?: string | null
+          patient_name?: string | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          doctor_name?: string | null
+          doctor_registration_number?: string | null
+          prescription_image_url?: string | null
+          approved_at?: string | null
+          ready_at?: string | null
+          dispatched_at?: string | null
+          delivered_at?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           status_updated_at?: string
           units_requested: number
@@ -185,9 +228,20 @@ export type Database = {
           blood_bank_id?: string
           blood_group?: Database["public"]["Enums"]["blood_group"]
           created_at?: string
-          hospital_id?: string
+          hospital_id?: string | null
+          guest_id?: string | null
           id?: string
           notes?: string | null
+          patient_name?: string | null
+          patient_age?: number | null
+          patient_gender?: string | null
+          doctor_name?: string | null
+          doctor_registration_number?: string | null
+          prescription_image_url?: string | null
+          approved_at?: string | null
+          ready_at?: string | null
+          dispatched_at?: string | null
+          delivered_at?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           status_updated_at?: string
           units_requested?: number
@@ -259,6 +313,243 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      cms_content: {
+        Row: {
+          id: string
+          section: string
+          title: string
+          subtitle: string | null
+          content: string
+          description: string | null
+          is_published: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          section: string
+          title: string
+          subtitle?: string | null
+          content: string
+          description?: string | null
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          section?: string
+          title?: string
+          subtitle?: string | null
+          content?: string
+          description?: string | null
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      donors: {
+        Row: {
+          id: string
+          name: string
+          email: string
+          phone: string
+          city: string
+          area: string
+          blood_group: string
+          last_donation_date: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          email: string
+          phone: string
+          city: string
+          area: string
+          blood_group: string
+          last_donation_date: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          email?: string
+          phone?: string
+          city?: string
+          area?: string
+          blood_group?: string
+          last_donation_date?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      guests: {
+        Row: {
+          id: string
+          name: string
+          phone: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          phone: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          phone?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      inquiries: {
+        Row: {
+          id: string
+          donor_id: string | null
+          sender_name: string
+          sender_email: string
+          sender_phone: string
+          category: string
+          subject: string
+          message: string
+          status: string
+          priority: string
+          admin_response: string | null
+          responded_by: string | null
+          responded_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          donor_id?: string | null
+          sender_name: string
+          sender_email: string
+          sender_phone: string
+          category: string
+          subject: string
+          message: string
+          status?: string
+          priority?: string
+          admin_response?: string | null
+          responded_by?: string | null
+          responded_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          donor_id?: string | null
+          sender_name?: string
+          sender_email?: string
+          sender_phone?: string
+          category?: string
+          subject?: string
+          message?: string
+          status?: string
+          priority?: string
+          admin_response?: string | null
+          responded_by?: string | null
+          responded_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      states: {
+        Row: {
+          id: string
+          name: string
+        }
+        Insert: {
+          id?: string
+          name: string
+        }
+        Update: {
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      cities: {
+        Row: {
+          id: string
+          name: string
+          state_id: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          state_id: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          state_id?: string
+        }
+        Relationships: []
+      }
+      areas: {
+        Row: {
+          id: string
+          name: string
+          city_id: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          city_id: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          city_id?: string
+        }
+        Relationships: []
+      }
+      theme_settings: {
+        Row: {
+          id: string
+          primary_color: string
+          secondary_color: string
+          accent_color: string
+          background_color: string
+          text_color: string
+          card_background: string
+          border_color: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          primary_color: string
+          secondary_color: string
+          accent_color: string
+          background_color: string
+          text_color: string
+          card_background: string
+          border_color: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          primary_color?: string
+          secondary_color?: string
+          accent_color?: string
+          background_color?: string
+          text_color?: string
+          card_background?: string
+          border_color?: string
+          created_at?: string
+          updated_at?: string
         }
         Relationships: []
       }

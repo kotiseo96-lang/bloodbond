@@ -144,10 +144,10 @@ export const OrderCard: React.FC<OrderCardProps> = ({
           currentStatus={order.status}
           timestamps={{
             pending: order.created_at,
-            approved: order.approved_at,
-            ready: order.ready_at,
-            dispatched: order.dispatched_at,
-            delivered: order.delivered_at,
+            approved: order.approved_at ?? undefined,
+            ready: order.ready_at ?? undefined,
+            dispatched: order.dispatched_at ?? undefined,
+            delivered: order.delivered_at ?? undefined,
           }}
         />
       )}

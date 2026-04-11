@@ -41,7 +41,7 @@ const Stock: React.FC = () => {
     )
   }
 
-  if (!role || role === "guest") {
+  if (!role) {
     return (
       <DashboardLayout>
         <div className="flex flex-col items-center justify-center py-12">

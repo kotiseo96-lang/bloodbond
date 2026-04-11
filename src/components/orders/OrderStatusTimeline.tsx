@@ -8,6 +8,7 @@ export type HospitalOrderStatus =
   | 'ready'
   | 'dispatched'
   | 'delivered'
+  | 'cancelled'
 
 const STATUS_FLOW: HospitalOrderStatus[] = [
   'pending',
@@ -23,6 +24,7 @@ const STATUS_LABELS: Record<HospitalOrderStatus, string> = {
   ready: 'Ready for Dispatch',
   dispatched: 'Dispatched',
   delivered: 'Delivered',
+  cancelled: 'Cancelled',
 }
 
 interface Props {
@@ -34,6 +36,14 @@ export const OrderStatusTimeline: React.FC<Props> = ({
   currentStatus,
   timestamps,
 }) => {
+  if (currentStatus === 'cancelled') {
+    return (
+      <p className="text-sm font-medium text-destructive">
+        This order was cancelled.
+      </p>
+    )
+  }
+
   const currentIndex = STATUS_FLOW.indexOf(currentStatus)
 
   return (

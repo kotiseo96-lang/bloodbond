@@ -109,6 +109,8 @@ const Donors: React.FC = () => {
 
   // Handle inquiry submission
   const handleInquiry = async () => {
+    if (!selectedDonor) return
+
     const error = validateInquiryForm()
     if (error) {
       setModalState("error")

@@ -62,7 +62,7 @@ const AddNewAdmin: React.FC = () => {
         return;
       }
 
-      const { error } = await signUp(email, password, fullName);
+      const { error } = await signUp(email, password, fullName, "admin");
 
       if (error) {
         if (error.message.includes('already registered')) {

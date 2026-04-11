@@ -50,12 +50,12 @@ export const useDonors = () => {
       const { data, error: insertError } = await supabase
         .from("donors")
         .insert([donorData])
-        .select("id,name,city,area,blood_group,last_donation_date")
+        .select("*")
         .single()
 
       if (insertError) throw insertError
 
-      setDonors([data, ...donors])
+      setDonors([data as Donor, ...donors])
       return { success: true, donor: data }
     } catch (err) {
       console.error("Error adding donor:", err)

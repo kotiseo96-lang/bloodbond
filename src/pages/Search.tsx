@@ -33,7 +33,7 @@ const Search: React.FC = () => {
   const { myHospital } = useHospitals()
   const { user, role } = useAuth()
 
-  const isGuest = !user || role === "guest"
+  const isGuest = !user || !role
   const isHospital = !isGuest && role === "hospital"
 
   console.log("[v0] Blood banks loaded:", bloodBanks.length, "Stock items:", stock.length)

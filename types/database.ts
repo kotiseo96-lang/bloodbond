@@ -223,6 +223,7 @@ export const INQUIRY_CATEGORY_LABELS: Record<InquiryCategory, string> = {
   technical: "Technical",
   support: "Support",
   feedback: "Feedback",
+  donor: "Donor",
 }
 
 export const CONTENT_SECTIONS: ContentSection[] = ["home", "hospitals", "blood_banks"]
