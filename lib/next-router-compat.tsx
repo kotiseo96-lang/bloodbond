@@ -16,7 +16,8 @@ export function useNavigate() {
 export function useLocation() {
   const pathname = usePathname()
   const searchParams = useNextSearchParams()
-  const search = searchParams.toString()
+  const search = searchParams?.toString() ?? ""
+  
   return {
     pathname,
     search: search ? `?${search}` : "",
@@ -39,12 +40,13 @@ export function useSearchParams() {
           ? nextInit
           : Object.entries(nextInit),
     )
-    const url = params.toString() ? `${pathname}?${params.toString()}` : pathname
+    const base = pathname ?? ""
+    const url = params.toString() ? `${base}?${params.toString()}` : base
     if (options?.replace) router.replace(url)
     else router.push(url)
   }
 
-  return [searchParams, setSearchParams] as const
+  return [searchParams ?? new URLSearchParams(), setSearchParams] as const
 }
 
 export function Navigate({ to, replace = false }: { to: string; replace?: boolean }) {
@@ -62,7 +64,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, Omit<React.AnchorHTMLAtt
 
 type ClassNameRenderer = string | ((props: { isActive: boolean }) => string)
 
-export interface NavLinkProps extends Omit<React.ComponentProps<typeof NextLink>, 'href' | 'className'> {
+export interface NavLinkProps extends Omit<React.ComponentProps<typeof NextLink>, 'href' | 'className' | 'children'> {
   to: string
   className?: ClassNameRenderer
   children?: React.ReactNode | ((props: { isActive: boolean }) => React.ReactNode)

@@ -7,7 +7,7 @@ export type BloodGroup = "A+" | "A-" | "B+" | "B-" | "O+" | "O-" | "AB+" | "AB-"
 export type UrgencyLevel = "routine" | "urgent" | "emergency"
 
 export type InquiryStatus = "open" | "in_progress" | "resolved" | "closed"
-export type InquiryCategory = "general" | "technical" | "support" | "feedback"
+export type InquiryCategory = "general" | "technical" | "support" | "feedback" | "donor"
 export type ContentSection = "home" | "hospitals" | "blood_banks"
 
 /* =======================
@@ -42,6 +42,9 @@ export interface BloodBank {
   address: string
   city: string
   state: string | null
+  state_id?: string | null
+  city_id?: string | null
+  area_id?: string | null
   zip_code: string | null
   phone: string
   email: string
@@ -60,11 +63,15 @@ export interface Hospital {
   address: string
   city: string
   state: string | null
+  state_id?: string | null
+  city_id?: string | null
+  area_id?: string | null
   zip_code: string | null
   phone: string
   email: string
   latitude: number | null
   longitude: number | null
+  operating_hours?: string | null
   is_active: boolean
   created_at: string
   updated_at: string
