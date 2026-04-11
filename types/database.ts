@@ -1,4 +1,4 @@
-export type AppRole = "admin" | "blood_bank" | "hospital"
+export type AppRole = "admin" | "blood_bank" | "hospital" | "donor"
 
 export type OrderStatus = "pending" | "approved" | "ready" | "dispatched" | "delivered" | "cancelled"
 

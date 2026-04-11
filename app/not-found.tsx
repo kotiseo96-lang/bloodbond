@@ -1,4 +1,3 @@
-
 "use client"
 
 import NotFoundPage from "@/src/pages/NotFound"

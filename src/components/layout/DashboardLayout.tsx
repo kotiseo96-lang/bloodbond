@@ -28,7 +28,7 @@ interface NavItem {
   label: string
   icon: React.ElementType
   path: string
-  roles: ("admin" | "blood_bank" | "hospital")[]
+  roles: ("admin" | "blood_bank" | "hospital" | "donor")[]
 }
 
 const navItems: NavItem[] = [
@@ -72,6 +72,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, hideNavigat
         return "Blood Bank"
       case "hospital":
         return "Hospital"
+        case "donor":
+  return "Donor"
       default:
         return "User"
     }
