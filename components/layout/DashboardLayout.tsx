@@ -21,6 +21,7 @@ import {
   MessageCircle,
   Palette,
   FileText,
+  Gift,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -28,11 +29,11 @@ interface NavItem {
   label: string
   icon: React.ElementType
   path: string
-  roles: ("admin" | "blood_bank" | "hospital")[]
+  roles: ("admin" | "blood_bank" | "hospital" | "donor")[]
 }
 
 const navItems: NavItem[] = [
-  { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", roles: ["admin", "blood_bank", "hospital"] },
+  { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", roles: ["admin", "blood_bank", "hospital", "donor"] },
   { label: "Blood Stock", icon: Droplet, path: "/stock", roles: ["admin", "blood_bank"] },
   { label: "Orders", icon: ShoppingCart, path: "/orders", roles: ["admin", "blood_bank", "hospital"] },
   { label: "Search Blood", icon: MapPin, path: "/search", roles: ["hospital"] },
@@ -44,6 +45,24 @@ const navItems: NavItem[] = [
   // { label: "Content", icon: FileText, path: "/content", roles: ["admin"] },
   // { label: "Theme", icon: Palette, path: "/theme", roles: ["admin"] },
   { label: "Settings", icon: Settings, path: "/settings", roles: ["admin", "blood_bank", "hospital"] },
+  {
+    label: "Edit Profile",
+    icon: Settings,
+    path: "/donor/edit",
+    roles: ["donor"],
+  },
+  {
+    label: "Donations",
+    icon: Droplet,
+    path: "/user-donations",
+    roles: ["admin"],
+  },
+  {
+    label: "Donations",
+    icon: Gift,
+    path: "/donor-donations",
+    roles: ["donor"],
+  },
 ]
 
 interface DashboardLayoutProps {

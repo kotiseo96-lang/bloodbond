@@ -127,33 +127,6 @@ const Auth: React.FC = () => {
           </CardContent>
         </Card>
 
-        <div className="mt-8 space-y-3">
-          <p className="text-center text-sm text-muted-foreground">Don't have an account? Create one:</p>
-          <div className="grid grid-cols-3 gap-2">
-            <Button
-              variant="outline"
-              className="w-full text-xs bg-transparent"
-              onClick={() => navigate("/signup/admin")}
-            >
-              Admin
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full text-xs bg-transparent"
-              onClick={() => navigate("/signup/hospital")}
-            >
-              Hospital
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full text-xs bg-transparent"
-              onClick={() => navigate("/signup/bloodbank")}
-            >
-              Blood Bank
-            </Button>
-          </div>
-        </div>
-
         <p className="text-center text-sm text-muted-foreground mt-6">
           By continuing, you agree to our Terms of Service and Privacy Policy.
         </p>

@@ -198,7 +198,7 @@ const AdminSignup: React.FC = () => {
 
         <div className="mt-6 text-center space-y-2">
           <p className="text-sm text-muted-foreground">
-            Not an admin?{" "}
+            Already an admin?{" "}
             <Button variant="link" className="p-0" onClick={() => navigate("/auth")}>
               Go to login
             </Button>

@@ -8,12 +8,18 @@ import { OrderCard } from '@/components/orders/OrderCard';
 import { BloodGroupCard } from '@/components/blood/BloodGroupCard';
 import { Droplet, ShoppingCart, Building2, Activity, AlertTriangle } from 'lucide-react';
 import { BLOOD_GROUPS } from '@/types/database';
+import { useState } from "react";
+import { supabase } from "@/src/integrations/supabase/client";
 
 const AdminDashboard: React.FC = () => {
   const { stock } = useBloodStock();
   const { orders, updateOrderStatus } = useOrders();
   const { bloodBanks } = useBloodBanks();
   const { hospitals } = useHospitals();
+
+  const [donorId, setDonorId] = useState("");
+  const [units, setUnits] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const totalUnits = stock.reduce((sum, s) => sum + s.units_available, 0);
   const criticalStock = stock.filter((s) => s.units_available === 0).length;
@@ -28,6 +34,30 @@ const AdminDashboard: React.FC = () => {
   });
 
   const recentOrders = orders.slice(0, 5);
+
+  const handleAddDonation = async () => {
+    if (!donorId || !units) return;
+
+    setLoading(true);
+
+    const { error } = await supabase.rpc(
+      "create_donation_and_credit",
+      {
+        p_donor_id: donorId,
+        p_units: units,
+      }
+    );
+
+    setLoading(false);
+
+    if (error) {
+      console.error(error);
+      alert("Failed to add donation");
+      return;
+    }
+
+    alert("Donation added successfully!");
+  };
 
   return (
     <div className="space-y-8">
@@ -121,6 +151,34 @@ const AdminDashboard: React.FC = () => {
             </div>
           )}
         </div>
+      </div>
+      <div className="mt-10 bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 className="text-xl font-semibold">Add Donation</h2>
+
+        {/* Donor ID */}
+        <input
+          className="w-full border p-2 rounded"
+          placeholder="Donor ID"
+          value={donorId}
+          onChange={(e) => setDonorId(e.target.value)}
+        />
+
+        {/* Units */}
+        <input
+          type="number"
+          className="w-full border p-2 rounded"
+          placeholder="Units"
+          value={units}
+          onChange={(e) => setUnits(Number(e.target.value))}
+        />
+
+        <button
+          onClick={handleAddDonation}
+          disabled={loading}
+          className="bg-red-500 text-white px-4 py-2 rounded"
+        >
+          {loading ? "Adding..." : "Add Donation"}
+        </button>
       </div>
     </div>
   );

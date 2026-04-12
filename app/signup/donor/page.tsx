@@ -74,17 +74,17 @@ const DonorSignup: React.FC = () => {
 
       if (error) throw error
 
-      /* STEP 2: GET USER */
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser()
+      /* STEP 2: GET USER (SAFE SESSION METHOD) */
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession()
 
-      if (userError || !user) {
+      const user = sessionData?.session?.user
+
+      if (sessionError || !user) {
         throw new Error("User creation failed")
       }
 
-      /* STEP 3: ROLE (IMPORTANT FIX) */
+      /* STEP 3: ROLE */
       const { error: roleError } = await supabase
         .from("user_roles")
         .upsert(
@@ -97,11 +97,10 @@ const DonorSignup: React.FC = () => {
 
       if (roleError) throw roleError
 
-      /* STEP 4: DONOR PROFILE */
+      /* STEP 4: DONOR TABLE (NO NAME HERE) */
       const { error: donorError } = await supabase.from("donors").insert({
         user_id: user.id,
         name: form.name,
-        email: form.email,
         phone: form.phone,
         city: form.city,
         area: form.area,
@@ -111,7 +110,17 @@ const DonorSignup: React.FC = () => {
 
       if (donorError) throw donorError
 
-      /* STEP 5: WALLET */
+      /* STEP 5: PROFILE (SOURCE OF TRUTH FOR IDENTITY) */
+      const { error: profileError } = await supabase.from("profiles").insert({
+        id: user.id,
+        email: form.email,
+        full_name: form.name,
+        phone: form.phone,
+      })
+
+      if (profileError) throw profileError
+
+      /* STEP 6: WALLET */
       await supabase.from("user_wallets").insert({
         user_id: user.id,
         balance: 0,
@@ -124,7 +133,6 @@ const DonorSignup: React.FC = () => {
         type: "success",
       })
 
-      /* IMPORTANT: force refresh so role loads correctly */
       setTimeout(() => {
         window.location.href = "/dashboard"
       }, 1000)
@@ -143,7 +151,7 @@ const DonorSignup: React.FC = () => {
   /* ---------------- UI ---------------- */
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-xl">
 
         {/* HEADER */}
@@ -153,7 +161,9 @@ const DonorSignup: React.FC = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold">Blood Bond</h1>
-            <p className="text-sm text-muted-foreground">Donor Registration</p>
+            <p className="text-sm text-muted-foreground">
+              Donor Registration
+            </p>
           </div>
         </div>
 
@@ -203,11 +213,17 @@ const DonorSignup: React.FC = () => {
 
               <Input type="date"
                 value={form.last_donation_date}
-                onChange={(e) => setForm({ ...form, last_donation_date: e.target.value })}
+                onChange={(e) =>
+                  setForm({ ...form, last_donation_date: e.target.value })
+                }
               />
 
               <Button className="w-full" disabled={loading}>
-                {loading ? <Loader2 className="animate-spin" /> : "Create Donor Account"}
+                {loading ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  "Create Donor Account"
+                )}
               </Button>
 
             </form>
@@ -221,7 +237,16 @@ const DonorSignup: React.FC = () => {
         />
 
       </div>
+      <div className="mt-6 text-center space-y-2">
+          <p className="text-sm text-muted-foreground">
+            Already a Donor?{" "}
+            <Button variant="link" className="p-0" onClick={() => navigate("/auth")}>
+              Go to login
+            </Button>
+          </p>
+        </div>
     </div>
+    
   )
 }
 

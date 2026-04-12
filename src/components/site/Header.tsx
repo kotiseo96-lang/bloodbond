@@ -8,7 +8,7 @@ export default function Header() {
 
           {/* LOGO */}
           <Link href="/">
-            <img src="./Blood-Bond-Logo.png" width="150" alt="Blood Bond" />
+            <img src="/Blood-Bond-Logo.png" width="150" alt="Blood Bond" />
           </Link>
 
           {/* ACTIONS */}

@@ -68,25 +68,31 @@ const DonorDashboard: React.FC = () => {
       </div>
 
       {/* ACTION SECTION */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Gift className="h-5 w-5 text-primary" />
-            Redeem Rewards
-          </CardTitle>
-        </CardHeader>
+<Card>
+  <CardHeader>
+    <CardTitle className="flex items-center gap-2">
+      <Gift className="h-5 w-5 text-primary" />
+      Donor Actions
+    </CardTitle>
+  </CardHeader>
 
-        <CardContent className="space-y-4">
-          <p className="text-muted-foreground">
-            Convert your coins into gift coupons
-          </p>
+  <CardContent className="space-y-4">
+    <p className="text-muted-foreground">
+      Manage your profile and redeem rewards
+    </p>
 
-          <div className="flex gap-3">
-            <Button>Request Redemption</Button>
-            <Button variant="outline">View History</Button>
-          </div>
-        </CardContent>
-      </Card>
+    <div className="flex gap-3 flex-wrap">
+
+      <Button variant="outline">
+        Request Redemption
+      </Button>
+
+      <Button variant="outline">
+        View History
+      </Button>
+    </div>
+  </CardContent>
+</Card>
 
     </div>
   )
