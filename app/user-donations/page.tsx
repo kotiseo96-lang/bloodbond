@@ -14,20 +14,35 @@ export default function UserDonationsPage() {
   // STEP 1: SEARCH DONOR
   const searchDonor = async () => {
     setLoading(true)
-
-    const { data, error } = await supabase
+  
+    const cleanEmail = email.trim().toLowerCase()
+  
+    const { data: userData, error } = await supabase
+      .rpc("search_user_by_email", {
+        p_email: cleanEmail,
+      })
+      .maybeSingle()
+  
+    if (error || !userData) {
+      alert("User not found")
+      setDonor(null)
+      setLoading(false)
+      return
+    }
+  
+    const { data: donorData } = await supabase
       .from("donors")
       .select("*")
-      .ilike("email", email)
+      .eq("user_id", userData.id)
       .maybeSingle()
-
-    if (error || !data) {
-      alert("Donor not found")
+  
+    if (!donorData) {
+      alert("Donor profile not found")
       setDonor(null)
     } else {
-      setDonor(data)
+      setDonor(donorData)
     }
-
+  
     setLoading(false)
   }
 
@@ -37,48 +52,25 @@ export default function UserDonationsPage() {
       alert("Select donor first")
       return
     }
-
+  
     setLoading(true)
-
-    try {
-      // 1. Insert donation
-      const { error: donationError } = await supabase.from("donations").insert([
-        {
-          donor_id: donor.id,
-          blood_bank_id: BLOOD_BANK_ID,
-          units: units || 1,
-        },
-      ])
-
-      if (donationError) {
-        console.error(donationError)
-        alert("Donation insert failed")
-        return
-      }
-
-      // 2. Add coins (NEW SYSTEM - donor based)
-      const { error: coinError } = await supabase.from("coin_transactions").insert([
-        {
-          donor_id: donor.id,
-          type: "credit",
-          coins: 1000,
-          note: "Donation reward",
-        },
-      ])
-
-      if (coinError) {
-        console.error(coinError)
-        alert("Coins update failed (donation still saved)")
-      }
-
-      alert("Donation added successfully")
-      setUnits(1)
-    } catch (err) {
-      console.error(err)
-      alert("Unexpected error")
-    }
-
+  
+    const { error } = await supabase.rpc("add_donation_with_wallet", {
+      p_donor_id: donor.id,
+      p_blood_bank_id: BLOOD_BANK_ID,
+      p_units: units || 1
+    })
+  
     setLoading(false)
+  
+    if (error) {
+      console.error(error)
+      alert(error.message)
+      return
+    }
+  
+    alert("Donation added successfully")
+    setUnits(1)
   }
 
   return (

@@ -1,11 +1,41 @@
 "use client"
 
 import React from "react"
+import { supabase } from "@/src/integrations/supabase/client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Droplet, Gift, Coins } from "lucide-react"
 
 const DonorDashboard: React.FC = () => {
+  const [coins, setCoins] = React.useState<number>(0)
+const [loading, setLoading] = React.useState(true)
+
+
+const fetchWallet = async () => {
+  const { data: { user } } = await supabase.auth.getUser()
+
+  console.log("AUTH USER:", user)
+
+  const { data, error } = await supabase
+    .from("user_wallets")
+    .select("*")
+    .eq("user_id", user?.id)
+
+  console.log("WALLET DATA:", data)
+  console.log("WALLET ERROR:", error)
+
+  if (data && data.length > 0) {
+    setCoins(data[0].balance ?? 0)
+  } else {
+    setCoins(0)
+  }
+
+  setLoading(false)
+}
+
+React.useEffect(() => {
+  fetchWallet()
+}, [])
   return (
     <div className="p-6 space-y-6">
 
@@ -34,7 +64,9 @@ const DonorDashboard: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">0</p>
+          <p className="text-3xl font-bold">
+  {loading ? "..." : coins}
+</p>
             <p className="text-sm text-muted-foreground">
               Earned from donations
             </p>

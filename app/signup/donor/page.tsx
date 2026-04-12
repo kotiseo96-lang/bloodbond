@@ -65,23 +65,23 @@ const DonorSignup: React.FC = () => {
       }
 
       /* STEP 1: SIGNUP */
-      const { error } = await signUp(
+      const { error: signUpError } = await signUp(
         form.email,
         form.password,
         form.name,
         "donor"
       )
 
-      if (error) throw error
+      if (signUpError) throw signUpError
 
-      /* STEP 2: GET USER (SAFE SESSION METHOD) */
-      const { data: sessionData, error: sessionError } =
-        await supabase.auth.getSession()
+      /* STEP 2: GET AUTH USER (FIXED) */
+      const { data: authData, error: authError } =
+        await supabase.auth.getUser()
 
-      const user = sessionData?.session?.user
+      const user = authData?.user
 
-      if (sessionError || !user) {
-        throw new Error("User creation failed")
+      if (authError || !user) {
+        throw new Error("User creation failed or session not ready")
       }
 
       /* STEP 3: ROLE */
@@ -97,7 +97,7 @@ const DonorSignup: React.FC = () => {
 
       if (roleError) throw roleError
 
-      /* STEP 4: DONOR TABLE (NO NAME HERE) */
+      /* STEP 4: DONOR TABLE */
       const { error: donorError } = await supabase.from("donors").insert({
         user_id: user.id,
         name: form.name,
@@ -110,21 +110,30 @@ const DonorSignup: React.FC = () => {
 
       if (donorError) throw donorError
 
-      /* STEP 5: PROFILE (SOURCE OF TRUTH FOR IDENTITY) */
-      const { error: profileError } = await supabase.from("profiles").insert({
-        id: user.id,
-        email: form.email,
-        full_name: form.name,
-        phone: form.phone,
-      })
+      /* STEP 5: PROFILE */
+      const { error: profileError } = await supabase.from("profiles").upsert(
+        {
+          id: user.id,
+          email: form.email,
+          full_name: form.name,
+          phone: form.phone,
+        },
+        {
+          onConflict: "id",
+        }
+      )
 
       if (profileError) throw profileError
 
       /* STEP 6: WALLET */
-      await supabase.from("user_wallets").insert({
-        user_id: user.id,
-        balance: 0,
-      })
+      const { error: walletError } = await supabase
+        .from("user_wallets")
+        .insert({
+          user_id: user.id,
+          balance: 0,
+        })
+
+      if (walletError) throw walletError
 
       setModal({
         isOpen: true,
@@ -237,16 +246,16 @@ const DonorSignup: React.FC = () => {
         />
 
       </div>
+
       <div className="mt-6 text-center space-y-2">
-          <p className="text-sm text-muted-foreground">
-            Already a Donor?{" "}
-            <Button variant="link" className="p-0" onClick={() => navigate("/auth")}>
-              Go to login
-            </Button>
-          </p>
-        </div>
+        <p className="text-sm text-muted-foreground">
+          Already a Donor?{" "}
+          <Button variant="link" className="p-0" onClick={() => navigate("/auth")}>
+            Go to login
+          </Button>
+        </p>
+      </div>
     </div>
-    
   )
 }
 

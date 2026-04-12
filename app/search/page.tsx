@@ -1,7 +1,12 @@
 "use client"
 
-import PageComponent from "@/src/pages/Search"
+import { Suspense } from "react"
+import Search from "@/src/pages/Search"
 
 export default function Page() {
-  return <PageComponent />
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Search />
+    </Suspense>
+  )
 }

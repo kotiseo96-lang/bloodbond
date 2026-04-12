@@ -15,12 +15,15 @@ export function useNavigate() {
 
 export function useLocation() {
   const pathname = usePathname()
-  const searchParams = useNextSearchParams()
-  const search = searchParams?.toString() ?? ""
-  
+
+  const search =
+    typeof window !== "undefined"
+      ? window.location.search
+      : ""
+
   return {
     pathname,
-    search: search ? `?${search}` : "",
+    search,
     hash: "",
     state: null,
     key: pathname,
@@ -30,23 +33,32 @@ export function useLocation() {
 export function useSearchParams() {
   const router = useRouter()
   const pathname = usePathname()
-  const searchParams = useNextSearchParams()
 
-  const setSearchParams = (nextInit: URLSearchParams | string | Record<string, string>, options?: { replace?: boolean }) => {
+  // ✅ SAFE: don't call useNextSearchParams directly during SSR
+  const searchParams = typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search)
+    : new URLSearchParams()
+
+  const setSearchParams = (
+    nextInit: URLSearchParams | string | Record<string, string>,
+    options?: { replace?: boolean }
+  ) => {
     const params = new URLSearchParams(
-      typeof nextInit === 'string'
+      typeof nextInit === "string"
         ? nextInit
         : nextInit instanceof URLSearchParams
-          ? nextInit
-          : Object.entries(nextInit),
+        ? nextInit
+        : Object.entries(nextInit)
     )
+
     const base = pathname ?? ""
     const url = params.toString() ? `${base}?${params.toString()}` : base
+
     if (options?.replace) router.replace(url)
     else router.push(url)
   }
 
-  return [searchParams ?? new URLSearchParams(), setSearchParams] as const
+  return [searchParams, setSearchParams] as const
 }
 
 export function Navigate({ to, replace = false }: { to: string; replace?: boolean }) {
