@@ -1,5 +1,4 @@
 import React from 'react';
-import DashboardLayout from '@/components/layout/DashboardLayout';
 import { useHospitals } from '@/hooks/useHospitals';
 import { useOrders } from '@/hooks/useOrders';
 import { Card } from '@/components/ui/card';
@@ -17,7 +16,6 @@ const Hospitals: React.FC = () => {
   };
 
   return (
-    <DashboardLayout>
       <div className="space-y-8">
         {/* Header */}
         <div>
@@ -108,7 +106,6 @@ const Hospitals: React.FC = () => {
           </Table>
         </Card>
       </div>
-    </DashboardLayout>
   );
 };
 

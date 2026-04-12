@@ -2,7 +2,6 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import DashboardLayout from "@/components/layout/DashboardLayout"
 import { supabase } from "@/integrations/supabase/client"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -94,7 +93,6 @@ const Users: React.FC = () => {
   })
 
   return (
-    <DashboardLayout>
       <div className="space-y-8">
         <div>
           <h1 className="font-heading text-3xl font-bold text-foreground">Users</h1>
@@ -207,7 +205,6 @@ const Users: React.FC = () => {
           </Card>
         </div>
       </div>
-    </DashboardLayout>
   )
 }
 

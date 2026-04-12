@@ -98,15 +98,19 @@ const DonorSignup: React.FC = () => {
       if (roleError) throw roleError
 
       /* STEP 4: DONOR TABLE */
-      const { error: donorError } = await supabase.from("donors").insert({
-        user_id: user.id,
-        name: form.name,
-        phone: form.phone,
-        city: form.city,
-        area: form.area,
-        blood_group: form.blood_group,
-        last_donation_date: form.last_donation_date,
-      })
+      const { error: donorError } = await signUp(
+        form.email,
+        form.password,
+        form.name,
+        "donor",
+        {
+          phone: form.phone,
+          city: form.city,
+          area: form.area,
+          blood_group: form.blood_group,
+          last_donation_date: form.last_donation_date
+        }
+      )
 
       if (donorError) throw donorError
 

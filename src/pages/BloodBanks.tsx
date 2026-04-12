@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-import DashboardLayout from "@/components/layout/DashboardLayout"
 import { useAuth } from "@/src/contexts/AuthContext"
 import { useBloodBanks } from "@/hooks/useBloodBanks"
 import { useBloodStock } from "@/hooks/useBloodStock"
@@ -18,7 +17,6 @@ const BloodBanks: React.FC = () => {
 
   if (role === "hospital") {
     return (
-      <DashboardLayout>
         <div className="space-y-8">
           <div>
             <h1 className="font-heading text-3xl font-bold text-foreground">Blood Availability by Area</h1>
@@ -66,19 +64,16 @@ const BloodBanks: React.FC = () => {
             </Table>
           </Card>
         </div>
-      </DashboardLayout>
     )
   }
 
   if (role !== "admin") {
     return (
-      <DashboardLayout>
         <div className="flex flex-col items-center justify-center py-12">
           <Lock className="h-12 w-12 text-muted-foreground mb-4" />
           <h2 className="text-xl font-semibold text-foreground mb-2">Access Denied</h2>
           <p className="text-muted-foreground">You do not have permission to view this page</p>
         </div>
-      </DashboardLayout>
     )
   }
 
@@ -87,7 +82,6 @@ const BloodBanks: React.FC = () => {
   }
 
   return (
-    <DashboardLayout>
       <div className="space-y-8">
         {/* Header */}
         <div>
@@ -175,7 +169,6 @@ const BloodBanks: React.FC = () => {
           </Table>
         </Card>
       </div>
-    </DashboardLayout>
   )
 }
 

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { supabase } from "@/integrations/supabase/client"
-import DashboardLayout from "@/components/layout/DashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -96,7 +95,6 @@ export default function AdminLocations() {
   /* ---------------- UI ---------------- */
 
   return (
-    <DashboardLayout>
       <div className="grid gap-6 max-w-4xl">
 
         {/* STATE */}
@@ -203,6 +201,5 @@ export default function AdminLocations() {
         )}
 
       </div>
-    </DashboardLayout>
   )
 }

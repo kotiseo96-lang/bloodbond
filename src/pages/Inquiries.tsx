@@ -2,7 +2,6 @@
 
 import type React from "react"
 import { useState } from "react"
-import DashboardLayout from "@/components/layout/DashboardLayout"
 import { useInquiries } from "@/hooks/useInquiries"
 import { useAuth } from "@/src/contexts/AuthContext"
 import { Card } from "@/components/ui/card"
@@ -82,7 +81,7 @@ const Inquiries: React.FC = () => {
   const currentInquiry = inquiries.find((i) => i.id === selectedInquiry)
 
   return (
-    <DashboardLayout>
+    <>
       <div className="space-y-8">
         <div>
           <h1 className="font-heading text-3xl font-bold text-foreground">Inquiries</h1>
@@ -297,7 +296,7 @@ const Inquiries: React.FC = () => {
           )}
         </DialogContent>
       </Dialog>
-    </DashboardLayout>
+    </>
   )
 }
 

@@ -5,37 +5,61 @@ import { supabase } from "@/src/integrations/supabase/client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Droplet, Gift, Coins } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const DonorDashboard: React.FC = () => {
+  const router = useRouter()
+
   const [coins, setCoins] = React.useState<number>(0)
-const [loading, setLoading] = React.useState(true)
+  const [pending, setPending] = React.useState<number>(0)
+  const [redeemed, setRedeemed] = React.useState<number>(0)
+  const [loading, setLoading] = React.useState(true)
 
+  const fetchData = async () => {
+    setLoading(true)
 
-const fetchWallet = async () => {
-  const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      setLoading(false)
+      return
+    }
 
-  console.log("AUTH USER:", user)
+    // 1. Wallet coins
+    const { data: wallet, error: walletError } = await supabase
+      .from("user_wallets")
+      .select("balance")
+      .eq("user_id", user.id)
+      .maybeSingle()
 
-  const { data, error } = await supabase
-    .from("user_wallets")
-    .select("*")
-    .eq("user_id", user?.id)
+    if (!walletError && wallet) {
+      setCoins(wallet.balance || 0)
+    }
 
-  console.log("WALLET DATA:", data)
-  console.log("WALLET ERROR:", error)
+    // 2. Pending rewards
+    const { data: pendingData } = await supabase
+      .from("reward_requests")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("status", "pending")
 
-  if (data && data.length > 0) {
-    setCoins(data[0].balance ?? 0)
-  } else {
-    setCoins(0)
+    setPending(pendingData?.length || 0)
+
+    // 3. Redeemed (IMPORTANT FIX: use approved OR completed safely)
+    const { data: redeemedData } = await supabase
+      .from("reward_requests")
+      .select("id")
+      .eq("user_id", user.id)
+      .in("status", ["approved", "completed"])
+
+    setRedeemed(redeemedData?.length || 0)
+
+    setLoading(false)
   }
 
-  setLoading(false)
-}
+  React.useEffect(() => {
+    fetchData()
+  }, [])
 
-React.useEffect(() => {
-  fetchWallet()
-}, [])
   return (
     <div className="p-6 space-y-6">
 
@@ -63,10 +87,11 @@ React.useEffect(() => {
               Total Coins
             </CardTitle>
           </CardHeader>
+
           <CardContent>
-          <p className="text-3xl font-bold">
-  {loading ? "..." : coins}
-</p>
+            <p className="text-3xl font-bold">
+              {loading ? "..." : coins}
+            </p>
             <p className="text-sm text-muted-foreground">
               Earned from donations
             </p>
@@ -77,8 +102,11 @@ React.useEffect(() => {
           <CardHeader>
             <CardTitle>Pending Rewards</CardTitle>
           </CardHeader>
+
           <CardContent>
-            <p className="text-3xl font-bold">0</p>
+            <p className="text-3xl font-bold">
+              {loading ? "..." : pending}
+            </p>
             <p className="text-sm text-muted-foreground">
               Waiting approval
             </p>
@@ -89,8 +117,11 @@ React.useEffect(() => {
           <CardHeader>
             <CardTitle>Redeemed</CardTitle>
           </CardHeader>
+
           <CardContent>
-            <p className="text-3xl font-bold">0</p>
+            <p className="text-3xl font-bold">
+              {loading ? "..." : redeemed}
+            </p>
             <p className="text-sm text-muted-foreground">
               Gift cards received
             </p>
@@ -100,31 +131,38 @@ React.useEffect(() => {
       </div>
 
       {/* ACTION SECTION */}
-<Card>
-  <CardHeader>
-    <CardTitle className="flex items-center gap-2">
-      <Gift className="h-5 w-5 text-primary" />
-      Donor Actions
-    </CardTitle>
-  </CardHeader>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Gift className="h-5 w-5 text-primary" />
+            Donor Actions
+          </CardTitle>
+        </CardHeader>
 
-  <CardContent className="space-y-4">
-    <p className="text-muted-foreground">
-      Manage your profile and redeem rewards
-    </p>
+        <CardContent className="space-y-4">
+          <p className="text-muted-foreground">
+            Manage your profile and redeem rewards
+          </p>
 
-    <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap">
 
-      <Button variant="outline">
-        Request Redemption
-      </Button>
+            <Button
+              variant="outline"
+              onClick={() => router.push("/donor/rewards")}
+            >
+              Request Rewards
+            </Button>
 
-      <Button variant="outline">
-        View History
-      </Button>
-    </div>
-  </CardContent>
-</Card>
+            <Button
+              variant="outline"
+              onClick={() => router.push("/donor/history")}
+            >
+              View History
+            </Button>
+
+          </div>
+        </CardContent>
+      </Card>
 
     </div>
   )

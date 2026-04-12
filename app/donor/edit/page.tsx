@@ -7,9 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import DashboardLayout from "@/components/layout/DashboardLayout"
 import ProtectedRoute from "@/components/protected-route"
-import { useAuth } from "@/src/contexts/AuthContext"
 
 const DonorEditPage: React.FC = () => {
     const [loading, setLoading] = useState(false)
@@ -36,45 +34,49 @@ const DonorEditPage: React.FC = () => {
     useEffect(() => {
         const loadData = async () => {
             setFetching(true)
-
+    
             try {
-                const {
-                    data: { user },
-                } = await supabase.auth.getUser()
-
+                const { data: { user } } = await supabase.auth.getUser()
+    
                 if (!user) return
-
+    
                 setUserId(user.id)
-
+    
+                // 1. PROFILE (safe)
                 const { data: profile } = await supabase
                     .from("profiles")
-                    .select("*")
+                    .select("id, full_name, phone")
                     .eq("id", user.id)
-                    .single()
-
-                const { data: donor } = await supabase
+                    .maybeSingle()
+    
+                // 2. DONOR (IMPORTANT FIX)
+                const { data: donor, error: donorError } = await supabase
                     .from("donors")
                     .select("*")
-                    .or(`user_id.eq.${user.id},email.eq.${user.email}`)
-                    .order("created_at", { ascending: false })
-                    .limit(1)
+                    .eq("user_id", user.id)
                     .maybeSingle()
-
+    
+                if (donorError) {
+                    console.log("Donor error:", donorError)
+                }
+    
+                // 3. SAFE FORM SET
                 setForm({
-                    name: profile?.full_name || donor?.name || "",
-                    phone: profile?.phone || donor?.phone || "",
-                    city: donor?.city || "",
-                    area: donor?.area || "",
-                    blood_group: donor?.blood_group || "",
-                    last_donation_date: donor?.last_donation_date || "",
+                    name: profile?.full_name ?? donor?.name ?? "",
+                    phone: profile?.phone ?? donor?.phone ?? "",
+                    city: donor?.city ?? "",
+                    area: donor?.area ?? "",
+                    blood_group: donor?.blood_group ?? "",
+                    last_donation_date: donor?.last_donation_date ?? "",
                 })
+    
             } catch (err) {
-                console.error(err)
+                console.error("Fetch error:", err)
             } finally {
                 setFetching(false)
             }
         }
-
+    
         loadData()
     }, [])
 
@@ -155,9 +157,7 @@ const DonorEditPage: React.FC = () => {
     }
 
     return (
-        <ProtectedRoute>
-    <DashboardLayout>
-        <div className="p-6 max-w-2xl mx-auto space-y-6">
+        <div className="p-6 max-w-2xl space-y-6">
 
             <Card>
                 <CardHeader>
@@ -276,8 +276,6 @@ const DonorEditPage: React.FC = () => {
 
 
         </div>
-        </DashboardLayout>
-  </ProtectedRoute>
     )
 }
 

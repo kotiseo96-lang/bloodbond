@@ -2,7 +2,6 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import DashboardLayout from "@/components/layout/DashboardLayout"
 import { useAuth } from "@/src/contexts/AuthContext"
 import { useBloodBanks } from "@/hooks/useBloodBanks"
 import { useHospitals } from "@/hooks/useHospitals"
@@ -186,7 +185,6 @@ const Settings: React.FC = () => {
   const orgType = role === "hospital" ? "Hospital" : "Blood Bank"
 
   return (
-    <DashboardLayout>
       <div className="space-y-6 max-w-4xl">
         {/* Header */}
         <div>
@@ -451,7 +449,6 @@ const Settings: React.FC = () => {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
   )
 }
 
