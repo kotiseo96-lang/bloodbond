@@ -131,15 +131,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, hideNavigat
 
       {/* HEADER */}
       <div className="p-6 border-b border-border shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center">
-            <Droplet className="h-6 w-6 text-primary-foreground" />
-          </div>
-          <div>
-            <h1 className="font-bold">Blood Bond</h1>
-            <p className="text-xs text-muted-foreground">{getRoleLabel()}</p>
-          </div>
-        </div>
+      <Link href="/">
+            <img src="/Blood-Bond-Logo.png" width="150" alt="Blood Bond" />
+          </Link>
       </div>
 
       {/* NAV */}

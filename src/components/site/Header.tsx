@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button"
 
 export default function Header() {
     return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+    <nav className="bg-white backdrop-blur-lg border-b border-border py-4">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
 
           {/* LOGO */}
           <Link href="/">
-            <img src="/Blood-Bond-Logo.png" width="150" alt="Blood Bond" />
+            <img src="/Blood-Bond-Logo.png" width="250" alt="Blood Bond" />
           </Link>
 
           {/* ACTIONS */}

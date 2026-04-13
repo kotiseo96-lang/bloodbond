@@ -94,14 +94,11 @@ const Page: React.FC = () => {
     <div className="min-h-screen bg-background">
 
       {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur border-b">
+      <nav className="bg-white py-4 backdrop-blur border-b">
         <div className="container mx-auto px-4 h-16 flex justify-between items-center">
 
-          <Link to="/">
-            <div className="flex items-center gap-2">
-              <Droplet className="h-5 w-5 text-primary" />
-              <span className="font-bold">Blood Bond</span>
-            </div>
+        <Link href="/">
+            <img src="/Blood-Bond-Logo.png" width="250" alt="Blood Bond" />
           </Link>
 
           {/* ✅ ONLY REDIRECT BUTTON */}
@@ -113,7 +110,7 @@ const Page: React.FC = () => {
       </nav>
 
       {/* CONTENT */}
-      <div className="pt-24 px-4">
+      <div className="pt-10 px-4">
         <div className="container mx-auto">
 
           <h1 className="text-3xl font-bold text-center mb-6">
@@ -175,12 +172,39 @@ const Page: React.FC = () => {
             <h2>Contact {selectedDonor.name}</h2>
 
             <Input
-              placeholder="Your Name"
-              value={inquiryForm.name}
-              onChange={(e) =>
-                setInquiryForm({ ...inquiryForm, name: e.target.value })
-              }
-            />
+  placeholder="Your Name"
+  value={inquiryForm.name}
+  onChange={(e) =>
+    setInquiryForm({ ...inquiryForm, name: e.target.value })
+  }
+/>
+
+<Input
+  placeholder="Your Email"
+  className="mt-3"
+  value={inquiryForm.email}
+  onChange={(e) =>
+    setInquiryForm({ ...inquiryForm, email: e.target.value })
+  }
+/>
+
+<Input
+  placeholder="Your Phone"
+  className="mt-3"
+  value={inquiryForm.phone}
+  onChange={(e) =>
+    setInquiryForm({ ...inquiryForm, phone: e.target.value })
+  }
+/>
+
+<Input
+  placeholder="Message (optional)"
+  className="mt-3"
+  value={inquiryForm.message}
+  onChange={(e) =>
+    setInquiryForm({ ...inquiryForm, message: e.target.value })
+  }
+/>
 
             <Button className="w-full mt-4" onClick={handleInquiry}>
               Send

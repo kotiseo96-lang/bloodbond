@@ -4,7 +4,7 @@ import { Droplet, ArrowRight } from "lucide-react"
 
 export default function Hero() {
   return (
-    <section className="pt-32 pb-20 px-4">
+    <section className="pt-4 pb-20 px-4">
       <div className="container mx-auto text-center">
 
         <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
