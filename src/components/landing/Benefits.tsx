@@ -4,11 +4,11 @@ import { CheckCircle2, ArrowRight, Droplet } from "lucide-react"
 
 export default function Benefits() {
   const benefits = [
-    "Real-time blood availability across all registered banks",
+    "Real-time blood availability across a growing nationwide network",
     "Instant order placement with urgency prioritization",
-    "Interactive maps to locate nearest blood banks",
+    "Smart location tracking to find nearest blood banks and donors",
     "Comprehensive admin dashboard for oversight",
-    "Secure, role-based access control",
+    "Role-based access for hospitals, blood banks, and donors",
     "Live order status tracking",
   ]
 
@@ -23,7 +23,7 @@ export default function Benefits() {
           {/* LEFT SIDE */}
           <div>
             <h2 className="font-heading text-4xl font-bold text-foreground mb-6">
-              Why Choose Blood Bond?
+            India’s Trusted Blood Network
             </h2>
 
             <div className="space-y-4">

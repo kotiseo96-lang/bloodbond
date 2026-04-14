@@ -28,6 +28,13 @@ export default function UserTypes() {
         "Oversee operations, manage users, and ensure smooth coordination",
       color: "bg-success",
     },
+    {
+      icon: Users,
+      title: "Donors",
+      description:
+        "Register as a donor and be ready to help when someone in need requires blood",
+      color: "bg-destructive",
+    },
   ]
 
   return (
@@ -43,7 +50,7 @@ export default function UserTypes() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {userTypes.map((type, index) => (
             <Card
               key={index}

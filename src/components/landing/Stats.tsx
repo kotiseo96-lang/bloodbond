@@ -7,7 +7,9 @@ export default function Stats() {
     ]
   
     return (
-      <section className="py-12 border-y border-border bg-muted/30">
+      <section className="relative z-10 py-12 border rounded-xl 
+bg-white max-w-5xl mx-auto border-border bg-muted/30 
+-mt-4">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (

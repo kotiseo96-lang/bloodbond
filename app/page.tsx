@@ -6,6 +6,8 @@ import CTA from "@/src/components/landing/CTA"
 import Footer from "@/src/components/site/Footer"
 import Header from "@/src/components/site/Header"
 import Stats from "@/src/components/landing/Stats"
+import HowItWorks from "@/src/components/landing/HowItWorks"
+import DonorCTA from "@/src/components/landing/DonorCTA"
 
 export const metadata = {
   title: "Blood Bond - Connect Hospitals & Blood Banks",
@@ -27,7 +29,9 @@ export default function Page() {
       <Hero />
       <Stats />
       <Features />
+      <HowItWorks />
       <UserTypes />
+      <DonorCTA />
       <Benefits />
       <CTA />
       <Footer />

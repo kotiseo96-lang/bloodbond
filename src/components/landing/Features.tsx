@@ -11,22 +11,22 @@ export default function Features() {
     {
       icon: Clock,
       title: "Real-Time Updates",
-      description: "Live blood stock updates across all registered blood banks",
+      description: "Live blood availability updates across connected blood banks nationwide",
     },
     {
       icon: MapPin,
       title: "Location-Based Search",
-      description: "Find nearby blood banks with interactive maps",
+      description: "Find nearby blood banks and donors across cities with smart location search",
     },
     {
       icon: Zap,
       title: "Emergency Orders",
-      description: "Quick order placement for urgent blood requirements",
+      description: "Place emergency blood requests instantly with priority handling",
     },
     {
       icon: Shield,
       title: "Secure & Reliable",
-      description: "Enterprise-grade security for all transactions",
+      description: "Secure, reliable, and trusted system for hospitals, blood banks, and donors",
     },
   ]
 

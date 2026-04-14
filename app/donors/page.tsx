@@ -12,8 +12,7 @@ import { Modal } from "@/src/components/ui/modal"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 
-import { Droplet } from "lucide-react"
-import { Link } from "@/lib/next-router-compat"
+import Header from "@/src/components/site/Header"
 
 import {
   Table,
@@ -23,6 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table"
+import Footer from "@/src/components/site/Footer"
 
 const Page: React.FC = () => {
   const router = useRouter()
@@ -91,31 +91,27 @@ const Page: React.FC = () => {
   }
 
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-background">
 
-      {/* NAV */}
-      <nav className="bg-white py-4 backdrop-blur border-b">
+      {/* CONTENT */}
+      <div className="pt-4 px-4">
+        <div className="container mx-auto">
         <div className="container mx-auto px-4 h-16 flex justify-between items-center">
 
-        <Link href="/">
-            <img src="/Blood-Bond-Logo.png" width="250" alt="Blood Bond" />
-          </Link>
 
-          {/* ✅ ONLY REDIRECT BUTTON */}
-          <Button onClick={handleBecomeDonor}>
-            Become Donor
-          </Button>
+  {/* ✅ ONLY REDIRECT BUTTON */}
+  <Button onClick={handleBecomeDonor}>
+    Become Donor
+  </Button>
 
-        </div>
-      </nav>
-
-      {/* CONTENT */}
-      <div className="pt-10 px-4">
-        <div className="container mx-auto">
+</div>
 
           <h1 className="text-3xl font-bold text-center mb-6">
             Find Blood Donors
           </h1>
+          
 
           {donors.length === 0 ? (
             <p className="text-center">No donors found</p>
@@ -226,6 +222,8 @@ const Page: React.FC = () => {
       )}
 
     </div>
+    <Footer />
+    </>
   )
 }
 
