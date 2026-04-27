@@ -163,19 +163,6 @@ const DonorSignup: React.FC = () => {
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-xl">
 
-        {/* HEADER */}
-        <div className="flex items-center justify-center gap-3 mb-8">
-          <div className="h-14 w-14 rounded-2xl bg-primary flex items-center justify-center">
-            <Droplet className="h-8 w-8 text-primary-foreground" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold">Blood Bond</h1>
-            <p className="text-sm text-muted-foreground">
-              Donor Registration
-            </p>
-          </div>
-        </div>
-
         {/* FORM */}
         <Card>
           <CardHeader>

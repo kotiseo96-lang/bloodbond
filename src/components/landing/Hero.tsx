@@ -8,7 +8,7 @@ export default function Hero() {
 
       {/* Background Image */}
       <div
-        className="absolute inset-0 bg-no-repeat bg-right bg-contain opacity-80"
+        className="absolute inset-0 bg-no-repeat bg-right bg-contain opacity-50 max-md:hidden"
         style={{
           backgroundImage: "url('/hero-background.png')",
         }}
