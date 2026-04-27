@@ -26,7 +26,7 @@ export default function DonorCTA() {
           From your vein to someone’s veins — a bridge of humanity.
         </p>
 
-        <Link href="/auth">
+        <Link href="/signup/donor">
           <Button size="lg" className="gap-2 text-lg px-8">
             Become a Donor
             <ArrowRight className="h-5 w-5" />
