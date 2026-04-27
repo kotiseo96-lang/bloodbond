@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import type React from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { useDonors } from "@/hooks/useDonors"
-import type { Donor } from "@/hooks/useDonors"
-import { useAuth } from "@/src/contexts/AuthContext"
+import { useDonors } from "@/hooks/useDonors";
+import type { Donor } from "@/hooks/useDonors";
+import { useAuth } from "@/src/contexts/AuthContext";
 
-import { Modal } from "@/src/components/ui/modal"
-import { Button } from "@/src/components/ui/button"
-import { Input } from "@/src/components/ui/input"
+import { Modal } from "@/src/components/ui/modal";
+import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
 
-import Header from "@/src/components/site/Header"
+import Header from "@/src/components/site/Header";
 
 import {
   Table,
@@ -21,210 +21,215 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/src/components/ui/table"
-import Footer from "@/src/components/site/Footer"
+} from "@/src/components/ui/table";
+import Footer from "@/src/components/site/Footer";
 
 const Page: React.FC = () => {
-  const router = useRouter()
-  const { user } = useAuth()
+  const router = useRouter();
+  const { user } = useAuth();
 
-  const { donors, isLoading, recordDonorInquiry } = useDonors()
+  const { donors, isLoading, recordDonorInquiry } = useDonors();
 
-  const [showInquiryModal, setShowInquiryModal] = useState(false)
-  const [selectedDonor, setSelectedDonor] = useState<Donor | null>(null)
+  const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [selectedDonor, setSelectedDonor] = useState<Donor | null>(null);
 
-  const [modalState, setModalState] = useState<"success" | "error" | null>(null)
-  const [modalMessage, setModalMessage] = useState("")
+  const [modalState, setModalState] = useState<"success" | "error" | null>(
+    null,
+  );
+  const [modalMessage, setModalMessage] = useState("");
 
   const [inquiryForm, setInquiryForm] = useState({
     name: "",
     email: "",
     phone: "",
     message: "",
-  })
+  });
 
   // ✅ ONLY LOGIC YOU NEED
   const handleBecomeDonor = () => {
     if (!user) {
-      router.push("/signup/donor")
+      router.push("/signup/donor");
     } else {
-      router.push("/dashboard")
+      router.push("/dashboard");
     }
-  }
+  };
 
   const validateInquiryForm = () => {
-    if (!inquiryForm.name.trim()) return "Name is required"
-    if (!inquiryForm.email.trim()) return "Email is required"
-    if (!inquiryForm.phone.trim()) return "Phone is required"
-    return null
-  }
+    if (!inquiryForm.name.trim()) return "Name is required";
+    if (!inquiryForm.email.trim()) return "Email is required";
+    if (!inquiryForm.phone.trim()) return "Phone is required";
+    return null;
+  };
 
   const handleInquiry = async () => {
-    if (!selectedDonor) return
+    if (!selectedDonor) return;
 
-    const error = validateInquiryForm()
+    const error = validateInquiryForm();
     if (error) {
-      setModalState("error")
-      setModalMessage(error)
-      return
+      setModalState("error");
+      setModalMessage(error);
+      return;
     }
 
-    const result = await recordDonorInquiry(selectedDonor.id, inquiryForm)
+    const result = await recordDonorInquiry(selectedDonor.id, inquiryForm);
 
     if (result.success) {
-      setModalState("success")
-      setModalMessage("Sent successfully!")
-      setInquiryForm({ name: "", email: "", phone: "", message: "" })
-      setShowInquiryModal(false)
+      setModalState("success");
+      setModalMessage("Sent successfully!");
+      setInquiryForm({ name: "", email: "", phone: "", message: "" });
+      setShowInquiryModal(false);
     } else {
-      setModalState("error")
-      setModalMessage(result.error || "Failed")
+      setModalState("error");
+      setModalMessage(result.error || "Failed");
     }
-  }
+  };
 
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
-    )
+    );
   }
 
   return (
     <>
-    <Header />
-    <div className="min-h-screen bg-background">
-
-      {/* CONTENT */}
-      <div className="pt-4 px-4">
-        <div className="container mx-auto">
-        <div className="container mx-auto px-4 h-16 flex justify-between items-center">
-
-
-  {/* ✅ ONLY REDIRECT BUTTON */}
-  <Button onClick={handleBecomeDonor}>
-    Become Donor
-  </Button>
-
-</div>
-
-          <h1 className="text-3xl font-bold text-center mb-6">
-            Find Blood Donors
-          </h1>
-          
-
-          {donors.length === 0 ? (
-            <p className="text-center">No donors found</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Blood Group</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Last Donation</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-
-                <TableBody>
-                  {donors.map((donor) => (
-                    <TableRow key={donor.id}>
-                      <TableCell>{donor.name}</TableCell>
-                      <TableCell>{donor.blood_group}</TableCell>
-                      <TableCell>{donor.area}, {donor.city}</TableCell>
-                      <TableCell>
-                        {donor.last_donation_date
-                          ? new Date(donor.last_donation_date).toLocaleDateString()
-                          : "—"}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            setSelectedDonor(donor)
-                            setShowInquiryModal(true)
-                          }}
-                        >
-                          Contact
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+      <Header />
+      <div className="min-h-screen bg-background">
+        {/* CONTENT */}
+        <div className="pt-4 px-4">
+          <div className="container mx-auto">
+            <div className="container mx-auto px-4 h-16 flex justify-between items-center">
+              {/* ✅ ONLY REDIRECT BUTTON */}
+              <Button onClick={handleBecomeDonor}>Become Donor</Button>
             </div>
-          )}
 
-        </div>
-      </div>
+            <h1 className="text-3xl font-bold text-center mb-6">
+              Find Blood Donors
+            </h1>
 
-      {/* INQUIRY MODAL ONLY */}
-      {showInquiryModal && selectedDonor && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+            {donors.length === 0 ? (
+              <p className="text-center">No donors found</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Blood Group</TableHead>
+                      <TableHead>Location</TableHead>
+                      <TableHead>Last Donation</TableHead>
+                      <TableHead>Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
 
-            <h2>Contact {selectedDonor.name}</h2>
-
-            <Input
-  placeholder="Your Name"
-  value={inquiryForm.name}
-  onChange={(e) =>
-    setInquiryForm({ ...inquiryForm, name: e.target.value })
-  }
-/>
-
-<Input
-  placeholder="Your Email"
-  className="mt-3"
-  value={inquiryForm.email}
-  onChange={(e) =>
-    setInquiryForm({ ...inquiryForm, email: e.target.value })
-  }
-/>
-
-<Input
-  placeholder="Your Phone"
-  className="mt-3"
-  value={inquiryForm.phone}
-  onChange={(e) =>
-    setInquiryForm({ ...inquiryForm, phone: e.target.value })
-  }
-/>
-
-<Input
-  placeholder="Message (optional)"
-  className="mt-3"
-  value={inquiryForm.message}
-  onChange={(e) =>
-    setInquiryForm({ ...inquiryForm, message: e.target.value })
-  }
-/>
-
-            <Button className="w-full mt-4" onClick={handleInquiry}>
-              Send
-            </Button>
-
+                  <TableBody>
+                    {donors.map((donor) => (
+                      <TableRow key={donor.id}>
+                        <TableCell>{donor.name}</TableCell>
+                        <TableCell>{donor.blood_group}</TableCell>
+                        <TableCell>
+                          {donor.area}, {donor.city}
+                        </TableCell>
+                        <TableCell>
+                          {donor.last_donation_date
+                            ? new Date(
+                                donor.last_donation_date,
+                              ).toLocaleDateString()
+                            : "—"}
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              setSelectedDonor(donor);
+                              setShowInquiryModal(true);
+                            }}
+                          >
+                            Contact
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
           </div>
         </div>
-      )}
 
-      {/* STATUS MODAL */}
-      {modalState && (
-        <Modal
-          isOpen={true}
-          onClose={() => setModalState(null)}
-          title={modalState === "success" ? "Success" : "Error"}
-          message={modalMessage}
-          type={modalState}
-        />
-      )}
+        {/* INQUIRY MODAL ONLY */}
+        {showInquiryModal && selectedDonor && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+            <div className="bg-white p-6 rounded-lg w-full max-w-md relative">
+              <button
+                onClick={() => setShowInquiryModal(false)}
+                className="absolute top-3 right-3 text-gray-500 hover:text-black"
+              >
+                ✕
+              </button>
 
-    </div>
-    <Footer />
+              <h2 className="text-lg font-semibold mb-4">
+                Contact {selectedDonor.name}
+              </h2>
+              <div className="space-y-3">
+                <Input
+                  placeholder="Your Name"
+                  value={inquiryForm.name}
+                  onChange={(e) =>
+                    setInquiryForm({ ...inquiryForm, name: e.target.value })
+                  }
+                />
+
+                <Input
+                  placeholder="Your Email"
+                  className="mt-3"
+                  value={inquiryForm.email}
+                  onChange={(e) =>
+                    setInquiryForm({ ...inquiryForm, email: e.target.value })
+                  }
+                />
+
+                <Input
+                  placeholder="Your Phone"
+                  className="mt-3"
+                  value={inquiryForm.phone}
+                  onChange={(e) =>
+                    setInquiryForm({ ...inquiryForm, phone: e.target.value })
+                  }
+                />
+
+                <Input
+                  placeholder="Message (optional)"
+                  className="mt-3"
+                  value={inquiryForm.message}
+                  onChange={(e) =>
+                    setInquiryForm({ ...inquiryForm, message: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="flex justify-center mt-4">
+                <Button onClick={handleInquiry}>Send</Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* STATUS MODAL */}
+        {modalState && (
+          <Modal
+            isOpen={true}
+            onClose={() => setModalState(null)}
+            title={modalState === "success" ? "Success" : "Error"}
+            message={modalMessage}
+            type={modalState}
+          />
+        )}
+      </div>
+      <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
