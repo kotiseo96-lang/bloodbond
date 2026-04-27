@@ -29,7 +29,7 @@ shadow-lg shadow-black/50 border border-black/50 mx-auto">
 </div>
         <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl 
         font-bold text-foreground max-w-4xl leading-tight mb-6">
-          Connect Hospitals with{" "}
+          Connecting Hospitals with{" "}
           <span className="text-primary">Blood Banks</span> Instantly
         </h1>
 
