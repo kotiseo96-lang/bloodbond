@@ -3,7 +3,7 @@
 import React from "react"
 import { useState } from "react"
 import { useSearchParams, useNavigate } from "@/lib/next-router-compat"
-import DashboardLayout from "@/components/layout/DashboardLayout"
+import Header from "@/src/components/site/Header"
 import BloodBankMap from "@/components/map/BloodBankMap"
 import { useBloodBanks } from "@/hooks/useBloodBanks"
 import { useBloodStock } from "@/hooks/useBloodStock"
@@ -228,8 +228,9 @@ export default function Page() {
   const isOrderInvalid = availableUnits === 0 || requestedUnits < 1 || requestedUnits > availableUnits
 
   return (
-    <DashboardLayout hideNavigation={isGuest}>
-      <div className="space-y-8">
+    <>
+    <Header />
+      <div className="max-w-6xl mx-auto mt-4 space-y-8">
         <h1 className="text-3xl font-bold">Search Blood Availability</h1>
 
         <Card className="p-4 flex gap-4">
@@ -486,6 +487,6 @@ export default function Page() {
           confirmText="OK"
         />
       </div>
-    </DashboardLayout>
+    </>
   )
 }
