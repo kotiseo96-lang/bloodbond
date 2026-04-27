@@ -11,7 +11,7 @@ export default function SignupLayout({
       <Header />
 
       {/* 👇 IMPORTANT: offset fixed header height */}
-      <main className="pt-8">
+      <main className="pt-4">
         {children}
       </main>
 
