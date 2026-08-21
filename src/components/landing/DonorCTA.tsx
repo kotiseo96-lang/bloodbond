@@ -17,7 +17,7 @@ export default function DonorCTA() {
         </div>
         <div>
           <h2 className="font-heading text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Your Blood. Their Second Chance.
+          A Drop from you. A second chance for someone in need.
           </h2>
 
           <p className="text-lg text-muted-foreground mx-auto mb-10 leading-relaxed">
