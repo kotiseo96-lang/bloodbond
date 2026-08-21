@@ -31,6 +31,9 @@ export default function Header() {
         <Link href="/about">
             <Button variant="ghost">About</Button>
           </Link>
+          <Link href="/contact">
+            <Button variant="ghost">Contact</Button>
+          </Link>
           <Link href="/auth">
             <Button variant="ghost">Login</Button>
           </Link>
