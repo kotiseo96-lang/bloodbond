@@ -5,15 +5,13 @@ import { supabase } from "@/integrations/supabase/client"
 import Header from "@/src/components/site/Header"
 import Footer from "@/src/components/site/Footer"
 
-interface PageProps {
-  params: Promise<{ slug: string }>
-}
+const SLUG = "about"
 
-async function getPage(slug: string) {
+async function getPage() {
   const { data: page } = await supabase
     .from("cms_pages")
     .select("*")
-    .eq("slug", slug)
+    .eq("slug", SLUG)
     .eq("status", "published")
     .maybeSingle()
 
@@ -30,11 +28,8 @@ async function getPage(slug: string) {
   return { page, seo }
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  const { slug } = await params
-  const result = await getPage(slug)
+export async function generateMetadata(): Promise<Metadata> {
+  const result = await getPage()
 
   if (!result) {
     return {}
@@ -44,9 +39,7 @@ export async function generateMetadata({
 
   const title = seo?.meta_title || page.title
   const description = seo?.meta_description || undefined
-  const keywords = seo?.meta_keywords?.length
-    ? seo.meta_keywords
-    : undefined
+  const keywords = seo?.meta_keywords?.length ? seo.meta_keywords : undefined
 
   return {
     title,
@@ -69,9 +62,8 @@ export async function generateMetadata({
   }
 }
 
-export default async function PublicCMSPage({ params }: PageProps) {
-  const { slug } = await params
-  const result = await getPage(slug)
+export default async function AboutPage() {
+  const result = await getPage()
 
   if (!result) {
     notFound()
@@ -79,8 +71,6 @@ export default async function PublicCMSPage({ params }: PageProps) {
 
   const { page, seo } = result
 
-  // Content is authored via the admin RichTextEditor (TipTap) and stored as
-  // HTML. Sanitize before rendering since it still ends up on a public page.
   const safeContent = DOMPurify.sanitize(page.content)
 
   return (
@@ -89,7 +79,6 @@ export default async function PublicCMSPage({ params }: PageProps) {
       {seo?.schema_json ? (
         <script
           type="application/ld+json"
-          // Schema JSON is admin-authored in the CMS editor, not user input.
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(seo.schema_json),
           }}
