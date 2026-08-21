@@ -15,7 +15,7 @@ export interface Donor {
   created_at: string
 }
 
-export const useDonors = () => {
+export const useDonors = (filters:any={})  => {
   const [donors, setDonors] = useState<Donor[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -25,10 +25,13 @@ export const useDonors = () => {
     const fetchDonors = async () => {
       try {
         setIsLoading(true)
-        const { data, error: fetchError } = await supabase
-          .from("donors")
-          .select("*")
-          .order("created_at", { ascending: false })
+        let query = supabase
+    .from("donors").select("*").order("created_at", { ascending: false })
+  if (filters.blood_group) query = query.eq("blood_group", filters.blood_group)
+  if (filters.city)  query = query.ilike("city",  `%${filters.city}%`)
+  if (filters.area)  query = query.ilike("area",  `%${filters.area}%`)
+  if (filters.available) query = query.eq("is_available", true)
+  const { data, error: fetchError } = await query
 
         if (fetchError) throw fetchError
         setDonors(data || [])
@@ -42,7 +45,10 @@ export const useDonors = () => {
     }
 
     fetchDonors()
-  }, [])
+  }, [filters.blood_group,
+    filters.city,
+    filters.area,
+    filters.available])
 
   // Add new donor
   const addDonor = async (donorData: Omit<Donor, "id" | "created_at">) => {

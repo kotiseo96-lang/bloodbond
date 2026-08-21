@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
 import { BloodBank, BloodStock } from '@/types/database';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -138,13 +137,10 @@ const BloodBankMap: React.FC<BloodBankMapProps> = ({
       {selectedBank && (
         <Card className="absolute bottom-4 left-4 right-4 md:left-4 md:right-auto md:w-80 p-4 bg-card/95 backdrop-blur-sm">
           <h3 className="font-heading font-semibold text-foreground mb-2">
-            {selectedBank.name}
+          Blood Availability
           </h3>
           <p className="text-sm text-muted-foreground mb-2">
-            {selectedBank.address}, {selectedBank.city}
-          </p>
-          <p className="text-sm text-muted-foreground mb-3">
-            {selectedBank.phone}
+          {selectedBank.city}
           </p>
           <div className="flex flex-wrap gap-1 mb-3">
             {getStockForBank(selectedBank.id).map((stock) => (

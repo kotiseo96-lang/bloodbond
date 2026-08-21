@@ -4,18 +4,40 @@ import { useState, useEffect } from "react"
 import { supabase } from "../integrations/supabase/client"
 
 export interface Donor {
-  id: string
-  name: string
-  email: string
-  phone: string
-  city: string
-  area: string
-  blood_group: string
-  last_donation_date: string
-  created_at: string
+  id: string;
+
+  user_id?: string | null;
+
+  name: string;
+
+  email?: string | null;
+
+  phone?: string | null;
+
+  blood_group: string;
+
+  city?: string | null;
+
+  area?: string | null;
+
+  state_id?: string | null;
+
+  city_id?: string | null;
+
+  area_id?: string | null;
+
+  latitude?: number | null;
+
+  longitude?: number | null;
+
+  is_available: boolean;
+
+  last_donation_date?: string | null;
+
+  created_at: string;
 }
 
-export const useDonors = () => {
+export const useDonors = (filters:any={})  => {
   const [donors, setDonors] = useState<Donor[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -23,23 +45,96 @@ export const useDonors = () => {
   // Fetch all donors
   useEffect(() => {
     const fetchDonors = async () => {
-      try {
-        setIsLoading(true)
-        const { data, error: fetchError } = await supabase
-          .from("donors")
-          .select("*")
-          .order("created_at", { ascending: false })
 
-        if (fetchError) throw fetchError
-        setDonors(data || [])
-        setError(null)
-      } catch (err) {
-        console.error("Error fetching donors:", err)
-        setError(err instanceof Error ? err.message : "Failed to fetch donors")
-      } finally {
-        setIsLoading(false)
+      try {
+      
+      setIsLoading(true);
+      
+      
+      let query = supabase
+      .from("donors")
+      .select("*")
+      .order(
+      "created_at",
+      {
+      ascending:false
       }
-    }
+      );
+      
+      
+      
+      if(filters.blood_group){
+      
+      query=query.eq(
+      "blood_group",
+      filters.blood_group
+      );
+      
+      }
+      
+      
+      
+      if(filters.city){
+      
+      query=query.eq(
+      "city",
+      filters.city
+      );
+      
+      }
+      
+      
+      
+      if(filters.area){
+      
+      query=query.eq(
+      "area",
+      filters.area
+      );
+      
+      }
+      
+      
+      
+      if(filters.available){
+      
+      query=query.eq(
+      "is_available",
+      true
+      );
+      
+      }
+      
+      
+      
+      const {
+      data,
+      error:fetchError
+      }=await query;
+      
+      
+      if(fetchError)
+      throw fetchError;
+      
+      
+      setDonors(data || []);
+      
+      
+      }
+      
+      catch(error){
+      
+      console.error(error);
+      
+      }
+      
+      finally{
+      
+      setIsLoading(false);
+      
+      }
+      
+      };
 
     fetchDonors()
   }, [])

@@ -28,8 +28,6 @@ const Page: React.FC = () => {
   const router = useRouter();
   const { user } = useAuth();
 
-  const { donors, isLoading, recordDonorInquiry } = useDonors();
-
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [selectedDonor, setSelectedDonor] = useState<Donor | null>(null);
 
@@ -44,6 +42,10 @@ const Page: React.FC = () => {
     phone: "",
     message: "",
   });
+  const [filters, setFilters] = useState({ blood_group:"", city:"", area:"", available:false });
+  const [appliedFilters, setAppliedFilters] = useState(filters);
+
+  const { donors, isLoading, recordDonorInquiry } = useDonors(appliedFilters);
 
   // ✅ ONLY LOGIC YOU NEED
   const handleBecomeDonor = () => {
@@ -53,6 +55,8 @@ const Page: React.FC = () => {
       router.push("/dashboard");
     }
   };
+
+  
 
   const validateInquiryForm = () => {
     if (!inquiryForm.name.trim()) return "Name is required";
@@ -96,6 +100,7 @@ const Page: React.FC = () => {
     <>
       <Header />
       <div className="min-h-screen bg-background">
+        
         {/* CONTENT */}
         <div className="pt-4 px-4">
           <div className="container mx-auto">
@@ -107,6 +112,112 @@ const Page: React.FC = () => {
             <h1 className="text-3xl font-bold text-center mb-6">
               Find Blood Donors
             </h1>
+            <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <select
+            className="border rounded p-2"
+            onChange={(e) =>
+              setFilters({
+                ...filters,
+                blood_group: e.target.value,
+              })
+            }
+          >
+            <option value="">All Blood Groups</option>
+
+            <option>A+</option>
+
+            <option>A-</option>
+
+            <option>B+</option>
+
+            <option>B-</option>
+
+            <option>O+</option>
+
+            <option>O-</option>
+
+            <option>AB+</option>
+
+            <option>AB-</option>
+          </select>
+
+          <input
+            className="border rounded p-2"
+            placeholder="City"
+            onChange={(e) =>
+              setFilters({
+                ...filters,
+                city: e.target.value,
+              })
+            }
+          />
+
+          <input
+            className="border rounded p-2"
+            placeholder="Area"
+            onChange={(e) =>
+              setFilters({
+                ...filters,
+                area: e.target.value,
+              })
+            }
+          />
+
+          <label>
+            <input
+              type="checkbox"
+              onChange={(e) =>
+                setFilters({
+                  ...filters,
+                  available: e.target.checked,
+                })
+              }
+            />
+            Available Now
+          </label>
+
+          <button
+type="button"
+className="
+bg-red-600
+text-white
+px-5
+py-2
+rounded-lg
+"
+onClick={()=>{
+ setAppliedFilters(filters);
+}}
+>
+Apply Filters
+</button>
+
+<button
+type="button"
+className="
+border
+px-5
+py-2
+rounded-lg
+"
+onClick={()=>{
+
+const empty={
+blood_group:"",
+city:"",
+area:"",
+available:false
+};
+
+setFilters(empty);
+setAppliedFilters(empty);
+
+}}
+>
+Clear
+</button>
+
+        </div>
 
             {donors.length === 0 ? (
               <p className="text-center">No donors found</p>

@@ -89,31 +89,21 @@ const DonorSignup: React.FC = () => {
         throw new Error("User creation failed or session not ready");
       }
 
-      /* STEP 3: ROLE */
-      const { error: roleError } = await supabase.from("user_roles").upsert(
-        {
-          user_id: user.id,
-          role: "donor",
-        },
-        { onConflict: "user_id" },
-      );
-
-      if (roleError) throw roleError;
-
-      /* STEP 4: DONOR TABLE */
-      const { error: donorError } = await supabase.from("donors").insert({
-        user_id: user.id,
-        name: form.name,
-        phone: form.phone,
-        city: form.city,
-        area: form.area,
-        blood_group: form.blood_group,
-        last_donation_date: form.last_donation_date,
-        occupation: form.occupation,
-        mode_of_transport: form.mode_of_transport,
-      });
-
-      if (donorError) throw donorError;
+      // handle_new_user() already made profiles, user_wallets,
+      // user_roles('donor') and the donors row — only fill in the rest.
+      await supabase
+        .from("donors")
+        .update({
+          name,
+          phone,
+          city,
+          area,
+          blood_group,
+          last_donation_date: form.last_donation_date || null,
+          occupation,
+          mode_of_transport,
+        })
+        .eq("user_id", user.id);
 
       /* STEP 5: PROFILE */
       const { error: profileError } = await supabase.from("profiles").upsert(
@@ -129,16 +119,6 @@ const DonorSignup: React.FC = () => {
       );
 
       if (profileError) throw profileError;
-
-      /* STEP 6: WALLET */
-      const { error: walletError } = await supabase
-        .from("user_wallets")
-        .insert({
-          user_id: user.id,
-          balance: 0,
-        });
-
-      if (walletError) throw walletError;
 
       setModal({
         isOpen: true,
@@ -268,14 +248,18 @@ const DonorSignup: React.FC = () => {
                       setForm({ ...form, occupation: e.target.value })
                     }
                   />
-
-                  <Input
-                    placeholder="Mode of Transport"
+                  <select
                     value={form.mode_of_transport}
                     onChange={(e) =>
                       setForm({ ...form, mode_of_transport: e.target.value })
                     }
-                  />
+                    className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                  >
+                    <option value="">Select Mode of Transport</option>
+                    <option value="two_wheeler">Two Wheeler</option>
+                    <option value="four_wheeler">Four Wheeler</option>
+                    <option value="public_transport">Public Transport</option>
+                  </select>
                 </>
               )}
 

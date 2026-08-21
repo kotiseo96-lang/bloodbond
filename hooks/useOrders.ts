@@ -23,6 +23,7 @@ export const useOrders = (filter?: { hospitalId?: string; bloodBankId?: string }
         .from("orders")
         .select(`
   id,
+  blood_bank_id,
   blood_group,
   units_requested,
   urgency,
@@ -158,6 +159,26 @@ export const useOrders = (filter?: { hospitalId?: string; bloodBankId?: string }
   };
 
 
+  const allocateOrder = async (orderId: string, bloodBankId: string) => {
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({ blood_bank_id: bloodBankId })
+        .eq('id', orderId);
+
+      if (error) throw error;
+
+      toast({ title: 'Order Allocated', description: 'Blood bank assigned to this order' });
+      await fetchOrders();
+      return { success: true };
+    } catch (error) {
+      console.error('Error allocating order:', error);
+      toast({ title: 'Error', description: 'Failed to allocate order', variant: 'destructive' });
+      return { success: false };
+    }
+  };
+
+
   useEffect(() => {
     fetchOrders();
 
@@ -187,6 +208,7 @@ export const useOrders = (filter?: { hospitalId?: string; bloodBankId?: string }
     createOrder,
     updateOrderStatus,
     cancelOrder,
+    allocateOrder,
     refetch: fetchOrders,
   };
 

@@ -264,7 +264,7 @@ export default function Page() {
           </Select>
         </Card>
 
-        <BloodBankMap bloodBanks={filteredBanks} bloodStock={stock} onSelectBloodBank={handleSelectBank} />
+        {/* <BloodBankMap bloodBanks={filteredBanks} bloodStock={stock} onSelectBloodBank={handleSelectBank} /> */}
         <div>
           <h2 className="font-heading text-xl font-semibold mb-4">Available Blood Banks ({filteredBanks.length})</h2>
 
@@ -278,7 +278,7 @@ export default function Page() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredBanks.map((bank) => (
                 <Card key={bank.id} className="p-5">
-                  <h3 className="font-semibold">{bank.name}</h3>
+                  <h3 className="font-semibold">Blood Availability</h3>
                   <p className="text-sm text-muted-foreground">{bank.city}</p>
 
                   <div className="flex flex-wrap gap-2 mt-3">

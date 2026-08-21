@@ -35,6 +35,7 @@ const navItems: NavItem[] = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", roles: ["admin", "blood_bank", "hospital", "donor"] },
   { label: "Blood Stock", icon: Droplet, path: "/stock", roles: ["admin", "blood_bank"] },
   { label: "Orders", icon: ShoppingCart, path: "/orders", roles: ["admin", "blood_bank", "hospital"] },
+  { label: "Allocate Orders", icon: ShoppingCart, path: "/admin/orders", roles: ["admin"] },
   { label: "Search Blood", icon: MapPin, path: "/search", roles: ["hospital"] },
   { label: "Blood Banks", icon: Building2, path: "/admin/blood-banks", roles: ["admin"] },
   { label: "Hospitals", icon: Activity, path: "/admin/hospitals", roles: ["admin"] },

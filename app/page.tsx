@@ -10,7 +10,7 @@ import HowItWorks from "@/src/components/landing/HowItWorks"
 import DonorCTA from "@/src/components/landing/DonorCTA"
 
 export const metadata = {
-  title: "Blood Bond - Connect Hospitals & Blood Banks",
+  title: { absolute: "Blood Bond — Connect Hospitals, Blood Banks & Donors" },
   description:
     "Real-time blood inventory management system for hospitals, blood banks, and emergency orders.",
   keywords: [

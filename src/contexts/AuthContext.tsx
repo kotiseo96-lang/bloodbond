@@ -34,7 +34,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchUserRole = async (userId: string) => {
     try {
-      const { data, error } = await supabase.from("user_roles").select("role").eq("user_id", userId).maybeSingle()
+      console.log("🔑 FETCHING ROLE FOR:", userId)
+      const { data, error } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId)
+      .maybeSingle()
+
+    console.log("📦 user_roles result:", data)
+    console.log("❌ user_roles error:", error)
 
       if (error) {
         console.error("Error fetching role:", error)
@@ -98,7 +106,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         password,
         options: {
           emailRedirectTo: redirectUrl,
-          data: { full_name: fullName },
+          data: { full_name: fullName, role  },
         },
       })
   

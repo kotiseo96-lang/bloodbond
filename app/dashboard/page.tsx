@@ -12,6 +12,7 @@ import { Loader2 } from "lucide-react"
 
 function DashboardContent() {
   const { role, isLoading } = useAuth()
+  console.log("role: ",role)
 
   if (isLoading) {
     return (

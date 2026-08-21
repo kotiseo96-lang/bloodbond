@@ -28,6 +28,9 @@ export default function Header() {
 
         {/* DESKTOP ACTIONS */}
         <div className="hidden md:flex items-center gap-3">
+        <Link href="/about">
+            <Button variant="ghost">About</Button>
+          </Link>
           <Link href="/auth">
             <Button variant="ghost">Login</Button>
           </Link>
